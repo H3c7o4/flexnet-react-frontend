@@ -1,27 +1,25 @@
 import Button from "./Button";
 
-function NavBar() {
-    const onFunction = () => {
+const NavBar = () => {
+    const handleClick = () => {
         console.log('clicked');
-    }
+    };
 
     return (
-    <nav className="flex flex-row justify-start">
-        <div>
-            <h1 className="font-serif text-2xl font-bold hover:font-sans">Movies</h1>
-        </div>
-        <div>
-        <ul className="flex flex-row space-x-6 justify-between">
-          <li className="font-serif"><a href="/similar">Find similar</a></li>
-          <li className="font-serif"><a href="/topgenres">Top genres</a></li>
-          <li className="font-serif"><a href="/topchoices">Top choices</a></li>
-        </ul>
-        </div>
-        <div>
-        <Button text="Get recommendations" color="black" onClick={onFunction}/>
-        </div>
-    </nav>
+        <nav className="flex flex-row justify-between p-4">
+            <div>
+                <h1 className="font-serif text-2xl font-bold hover:font-sans">Flexnet</h1>
+            </div>
+            <ul className="hidden md:flex md:flex-row md:justify-between md:p-1 md:space-x-6">
+                <li className="font-serif hover:text-gray-500"><a href="/similar">Find similar</a></li>
+                <li className="font-serif hover:text-gray-500"><a href="/topgenres">Top genres</a></li>
+                <li className="font-serif hover:text-gray-500"><a href="/topchoices">Top choices</a></li>
+            </ul>
+            <div>
+                <Button text="Get recommendations" color="black" onClick={handleClick} />
+            </div>
+        </nav>
     );
-}
+};
 
 export default NavBar;
