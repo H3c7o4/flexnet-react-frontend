@@ -4,6 +4,7 @@ import MovieCard from './MovieCard';
 function Form() {
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [recommendations, setRecommendations] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(false); // Nouvel état pour le chargement
 
     const handleGenreSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedGenre = e.target.value;
@@ -17,65 +18,67 @@ function Form() {
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+        event.preventDefault();
+        setIsLoading(true); // Début du chargement
 
-    try {
-        let recommendations: any[] = [];
+        try {
+            let recommendations: any[] = [];
 
-        // Récupérer les valeurs des champs de titre de film
-        const movieTitles: string[] = [];
-        for (let i = 1; i <= 5; i++) {
-            const input = (event.target as any).elements[`movieTitle${i}`] as HTMLInputElement;
-            if (input && input.value.trim() !== '') {
-                movieTitles.push(input.value.trim());
-            }
-        }
-
-        // Vérifier si au moins un champ de titre de film est rempli
-        if (movieTitles.length > 0) {
-            // Effectuer une recherche basée sur chaque titre de film non vide
-            for (const title of movieTitles) {
-                const response = await fetch(`http://0.0.0.0:8000/movies/recommend/${encodeURIComponent(title)}`, {
-                    method: 'GET',
-                    headers: {
-                        'accept': 'application/json',
-                    },
-                });
-                const data = await response.json();
-                recommendations.push(...data);
-            }
-        } else {
-            // Si aucun titre de film n'est rempli, vérifier les catégories sélectionnées
-            const selectedGenres: string[] = [];
-            const genreSelect = (event.target as any).elements['favoriteGenres'] as HTMLSelectElement;
-            for (let i = 0; i < genreSelect.options.length; i++) {
-                const option = genreSelect.options[i];
-                if (option.selected) {
-                    selectedGenres.push(option.value);
+            // Récupérer les valeurs des champs de titre de film
+            const movieTitles: string[] = [];
+            for (let i = 1; i <= 5; i++) {
+                const input = (event.target as any).elements[`movieTitle${i}`] as HTMLInputElement;
+                if (input && input.value.trim() !== '') {
+                    movieTitles.push(input.value.trim());
                 }
             }
 
-            // Si des genres sont sélectionnés, effectuer une recherche basée sur les genres
-            if (selectedGenres.length > 0) {
-                for (const genre of selectedGenres) {
-                    const response = await fetch(`http://0.0.0.0:8000/movies/${encodeURIComponent(genre)}?skip=0&limit=5`, {
+            // Vérifier si au moins un champ de titre de film est rempli
+            if (movieTitles.length > 0) {
+                // Effectuer une recherche basée sur chaque titre de film non vide
+                for (const title of movieTitles) {
+                    const response = await fetch(`http://0.0.0.0:8000/movies/recommend/${encodeURIComponent(title)}`, {
                         method: 'GET',
                         headers: {
                             'accept': 'application/json',
                         },
                     });
                     const data = await response.json();
-                    recommendations.push(...data['Movies from Western category']);
+                    recommendations.push(...data);
+                }
+            } else {
+                // Si aucun titre de film n'est rempli, vérifier les catégories sélectionnées
+                const selectedGenres: string[] = [];
+                const genreSelect = (event.target as any).elements['favoriteGenres'] as HTMLSelectElement;
+                for (let i = 0; i < genreSelect.options.length; i++) {
+                    const option = genreSelect.options[i];
+                    if (option.selected) {
+                        selectedGenres.push(option.value);
+                    }
+                }
+
+                // Si des genres sont sélectionnés, effectuer une recherche basée sur les genres
+                if (selectedGenres.length > 0) {
+                    for (const genre of selectedGenres) {
+                        const response = await fetch(`http://0.0.0.0:8000/movies/${encodeURIComponent(genre)}?skip=0&limit=5`, {
+                            method: 'GET',
+                            headers: {
+                                'accept': 'application/json',
+                            },
+                        });
+                        const data = await response.json();
+                        recommendations.push(...data['Movies from Western category']);
+                    }
                 }
             }
+
+            setRecommendations(recommendations);
+        } catch (error) {
+            console.error('Error fetching recommendations:', error);
+        } finally {
+            setIsLoading(false); // Fin du chargement
         }
-
-        setRecommendations(recommendations);
-    } catch (error) {
-        console.error('Error fetching recommendations:', error);
-    }
-};
-
+    };
 
     return (
         <div id="form-section" className="flex flex-col justify-between p-12">
@@ -83,66 +86,22 @@ function Form() {
                 <h1 className="font-bold font-serif text-3xl mb-3">Search for Movies</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                        <div>
-                            <label htmlFor="movieTitle1" className="mb-3 block text-base font-medium text-[#07074D]">
-                                Movie Title 1
-                            </label>
-                            <input 
-                                type="text" 
-                                name="movieTitle1" 
-                                id="movieTitle1" 
-                                placeholder="Enter a movie title"
-                                className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="movieTitle2" className="mb-3 block text-base font-medium text-[#07074D]">
-                                Movie Title 2
-                            </label>
-                            <input 
-                                type="text" 
-                                name="movieTitle2" 
-                                id="movieTitle2" 
-                                placeholder="Enter a movie title"
-                                className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="movieTitle3" className="mb-3 block text-base font-medium text-[#07074D]">
-                                Movie Title 3
-                            </label>
-                            <input 
-                                type="text" 
-                                name="movieTitle3" 
-                                id="movieTitle3" 
-                                placeholder="Enter a movie title"
-                                className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="movieTitle4" className="mb-3 block text-base font-medium text-[#07074D]">
-                                Movie Title 4
-                            </label>
-                            <input 
-                                type="text" 
-                                name="movieTitle4" 
-                                id="movieTitle4" 
-                                placeholder="Enter a movie title"
-                                className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="movieTitle5" className="mb-3 block text-base font-medium text-[#07074D]">
-                                Movie Title 5
-                            </label>
-                            <input 
-                                type="text" 
-                                name="movieTitle5" 
-                                id="movieTitle5" 
-                                placeholder="Enter a movie title"
-                                className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
-                            />
-                        </div>
+                        {/* Les champs de titre de film */}
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <div key={i}>
+                                <label htmlFor={`movieTitle${i}`} className="mb-3 block text-base font-medium text-[#07074D]">
+                                    Movie Title {i}
+                                </label>
+                                <input
+                                    type="text"
+                                    name={`movieTitle${i}`}
+                                    id={`movieTitle${i}`}
+                                    placeholder="Enter a movie title"
+                                    className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                                />
+                            </div>
+                        ))}
+                        {/* Le champ de sélection des genres */}
                         <div>
                             <label htmlFor="favoriteGenres" className="mb-3 block text-base font-medium text-[#07074D]">
                                 Favorite Genres
@@ -196,12 +155,28 @@ function Form() {
                     <div>
                         <button
                             type="submit"
-                            className="hover:shadow-form hover:bg-gray-700 w-full rounded-md bg-black py-3 px-8 text-center text-base font-semibold text-white outline-none">
-                            Get Recommendations
+                            className={`hover:shadow-form hover:bg-gray-700 w-full rounded-md bg-black py-3 px-8 text-center text-base font-semibold text-white outline-none ${isLoading ? 'cursor-not-allowed' : ''}`}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <span className="flex items-center justify-center">
+                                    <svg className="animate-spin h-5 w-5 mr-3 border-4 border-t-transparent border-white rounded-full" viewBox="0 0 24 24"></svg>
+                                    Loading...
+                                </span>
+                            ) : (
+                                'Get Recommendations'
+                            )}
                         </button>
                     </div>
                 </form>
             </div>
+
+            {/* Barre de chargement */}
+            {isLoading && (
+                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mt-5">
+                    <div className="h-full bg-blue-500 animate-pulse" style={{ width: '100%' }}></div>
+                </div>
+            )}
 
             {/* Section des recommandations */}
             <div className="mt-8 mx-auto w-full">
