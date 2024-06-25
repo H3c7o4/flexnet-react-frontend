@@ -1,10 +1,6 @@
 import Button from "./Button";
 
 const NavBar = () => {
-    const handleClick = () => {
-        console.log('clicked');
-    };
-
     return (
         <nav className="flex flex-row justify-between p-4">
             <div>
@@ -16,7 +12,7 @@ const NavBar = () => {
                 <li className="font-serif hover:text-gray-500"><a href="/topchoices">Top choices</a></li>
             </ul>
             <div>
-                <Button text="Get recommendations" color="black" onClick={handleClick} />
+                <Button text="Get recommendations" color="black" href="#form-section" />
             </div>
         </nav>
     );
