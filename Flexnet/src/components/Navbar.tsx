@@ -8,7 +8,7 @@ const NavBar = () => {
             </div>
             <ul className="hidden md:flex md:flex-row md:justify-between md:p-1 md:space-x-6">
                 <li className="font-serif hover:text-gray-500"><a href="/similar">Find similar</a></li>
-                <li className="font-serif hover:text-gray-500"><a href="/topgenres">Top genres</a></li>
+                <li className="font-serif hover:text-gray-500"><a href="#topgenres">Top genres</a></li>
                 <li className="font-serif hover:text-gray-500"><a href="/topchoices">Top choices</a></li>
             </ul>
             <div>

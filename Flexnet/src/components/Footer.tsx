@@ -38,7 +38,7 @@ function Footer() {
                         <h3 className="font-bold text-lg mb-4">Contact</h3>
                         <ul className="text-gray-400">
                             <li className="mb-2">Email: support@flexnet.com</li>
-                            <li className="mb-2">Phone: +123 456 7890</li>
+                            <li className="mb-2">Phone: +237 690 280 752</li>
                             <li className="mb-2">Address: Douala, Cameroon</li>
                         </ul>
                     </div>

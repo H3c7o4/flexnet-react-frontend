@@ -3,6 +3,7 @@ import Footer from './components/Footer.js';
 import Form from './components/Form.js';
 import Movies from './components/Movies.js';
 import Navbar from './components/Navbar.js';
+import MoviesByGenre from './components/MoviesByGenre.js';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
     <Banner />
     <Movies />
     <Form />
+    <MoviesByGenre />
     <Footer />
     </>
   );
