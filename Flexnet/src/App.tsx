@@ -10,8 +10,8 @@ function App() {
     <>
     <Navbar />
     <Banner />
-    <Movies />
     <Form />
+    <Movies />
     <MoviesByGenre />
     <Footer />
     </>

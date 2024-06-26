@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
+import { Movie } from "./DataTypes";
+
 
 function Movies() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -14,7 +16,7 @@ function Movies() {
 
   return (
     <div id="movies-section">
-      <h1 className="font-bold font-serif text-2xl mb-3 px-6">Popular Recommendations</h1>
+      <h1 className="font-bold font-serif text-3xl mb-3 px-6">Popular Recommendations</h1>
       <div className="flex flex-wrap justify-center">
         {movies.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />

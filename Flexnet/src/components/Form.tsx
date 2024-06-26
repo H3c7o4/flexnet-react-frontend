@@ -167,7 +167,7 @@ function Form() {
 
             <div className="mt-8 mx-auto w-full">
                 {recommendations.length > 0 && (
-                   <h2 className="font-bold text-xl mb-4">Recommended Movies</h2>
+                   <h2 className="font-bold text-3xl font-serif mb-4">Recommended Movies</h2>
                 )}
                 <div className="flex flex-wrap justify-center">
                     {recommendations.map((movie) => (

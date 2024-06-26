@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Movie } from "./DataTypes";
 
 interface Props {
   movie: Movie;
